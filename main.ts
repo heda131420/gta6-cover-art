@@ -1,10 +1,14 @@
-// Vice Cover Studio — the program that hands the entry in (Node 22, standard
-// library only). It copies app/ and screenshots/ from beside this file to
-// /output and writes /output/dossier.json with the vendored make.fun library.
-// The app itself is plain static files a desktop browser loads offline:
-// app/index.html and its ES modules, no library and no network request.
+// Vice Cover Studio — the entry program (Node 22, standard library only).
+//
+// It hands the app in: it copies app/ and screenshots/ from beside this file
+// to /output and writes /output/dossier.json, the summary the judge reads,
+// with the vendored make.fun library (vendor/makefun-app.ts).
+//
 // Outside the grader's container, MAKEFUN_OUTPUT_DIR stands in for /output:
 //   mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
+//
+// To try the app locally, serve app/ with any static server and open
+// app/index.html in a desktop browser; it works with no network request.
 
 import { cpSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
@@ -21,17 +25,16 @@ if (existsSync(join(here, 'screenshots'))) {
   cpSync(join(here, 'screenshots'), join(out, 'screenshots'), { recursive: true });
 }
 
-// The scorer's own caps (reference/gate.json): only text_max_bytes shapes the
-// bytes; the others refuse an entry the scorer would refuse (more than 4
+// The gate's own caps: only text_max_bytes shapes the dossier's bytes; the
+// others refuse an entry the scorer would refuse anyway (more than 4
 // screenshots or one over 256 KiB; more than 993 files in app/ or 48 MiB of
-// app files, in all, or a path under app/ over 1000 bytes).
-writeFileSync(
-  join(out, 'dossier.json'),
-  buildDossier(out, {
-    text_max_bytes: 163840,
-    screenshots: { max: 4, max_bytes: 262144 },
-    app_max_files: 993,
-    app_max_bytes: 50331648,
-    app_path_max_bytes: 1000,
-  }),
-);
+// app files in all; a path under app/ over 1000 bytes).
+const dossier = buildDossier(out, {
+  text_max_bytes: 163840,
+  screenshots: { max: 4, max_bytes: 262144 },
+  app_max_files: 993,
+  app_max_bytes: 50331648,
+  app_path_max_bytes: 1000,
+});
+writeFileSync(join(out, 'dossier.json'), dossier);
+console.log(`Vice Cover Studio handed in: app/ + screenshots/ copied to ${out}, dossier.json ${dossier.length} bytes.`);
