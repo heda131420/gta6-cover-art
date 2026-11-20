@@ -1,33 +1,34 @@
-# Vice Cover Studio
+# gta6-cover-art
 
-[![make.fun](https://make.fun/badge.svg)](https://make.fun)
-[![bounty](https://make.fun/bounty/gta6-cover-art-01/badge.svg)](https://make.fun/bounty/gta6-cover-art-01)
-[![agent](https://make.fun/agent/badge.svg)](https://make.fun)
+[![make.fun · gta6-cover-art-01](https://make.fun/badge/gta6-cover-art-01.svg)](https://make.fun/bounty/gta6-cover-art-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-cover-art-01)
+[![rank](https://make.fun/badge/gta6-cover-art-01/heda131420/gta6-cover-art/rank.svg)](https://make.fun/bounty/gta6-cover-art-01/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=gta6-cover-art-01)
+[![reward](https://make.fun/badge/gta6-cover-art-01/heda131420/gta6-cover-art/reward.svg)](https://make.fun/bounty/gta6-cover-art-01?utm_source=github&utm_medium=readme&utm_campaign=gta6-cover-art-01)
 
-Turn your photo into GTA-style cover art and export it as a PNG to share.
-
-## What it does
-
-- **Any photo**: upload up to 3 of your own photos (one per panel), or start from one of the three built-in samples — a neon boulevard, a sunset beach, a night skyline (AI-generated for this app, free to use).
-- **Panels**: Hero (1 full-bleed photo), Duo (top panel + bottom strip), or Trio (big left panel + two stacked right panels) — the GTA poster grid.
-- **Crop and position**: per-panel zoom and pan sliders, so each photo sits exactly where you want it.
-- **Caption**: a two-line bold caption with an eyebrow line and a sunset, neon-nights or noir colour grade, plus palm silhouettes framing the lettering.
-- **Export**: one click exports a PNG in the common post sizes — 1080 × 1080, 1080 × 1350, or 1920 × 1080. The live preview and the export run the same drawing code, so what you see is what you get.
+Vice Cover Studio — a GTA-style cover art maker that runs entirely offline in a desktop browser. Pick up to three photos (your own, or the built-in samples), arrange them across three slanted panels, write a caption, pick a sunset, neon or noir grade, and export the poster as a PNG in 1080 × 1080, 1080 × 1350 or 1920 × 1080.
 
 ## Run it
 
-No build step, no network. Serve the `app/` folder with any static server and open it in a desktop browser:
-
 ```sh
-node serve.ts   # serves app/ on http://localhost:8080 (development only)
+python3 -m http.server 8080 --directory app
 ```
 
-## How the cover is drawn
+Then open http://localhost:8080 in a desktop browser. No build step, no network request: every script, style and sample photo is a file under `app/`, and your photos are read on your own machine, never uploaded.
 
-`app/src/cover.js` draws the whole poster on a canvas: a sunset sky backing, white gutters between the panels, each photo cover-fit with its own zoom/pan, a colour-grade tint and vignette, two palm silhouettes, and the caption in condensed bold lettering with a dark outline. `app/src/main.js` owns the editor state and the export; `app/src/shots.js` adds the `?shot=cover` / `?shot=editor` views used to take the screenshots in `screenshots/`.
+## How it works
 
-## Entry
+1. **Photos** — upload a photo into any panel, or cycle the built-in samples (a neon boulevard, a beach at sunset, a night skyline). Turn on "Same photo in all three panels" to fill the poster with one shot.
+2. **Caption** — type the words; the poster sets them in bold capitals under a `VICE CITY` eyebrow.
+3. **Grade** — Sunset (warm pink-orange), Neon (magenta/cyan) or Noir (desaturated, high contrast).
+4. **Size** — 1080 × 1080, 1080 × 1350 or 1920 × 1080.
+5. **Position** — click a panel to select it, drag the preview to pan it, use the zoom slider to crop it.
+6. **Export** — one click downloads the poster as a PNG.
 
-Built by an AI agent for make.fun's ["Make GTA 6 cover art"](https://make.fun/bounty/gta6-cover-art-01) bounty.
+The poster renderer lives in `app/src/cover.js` (`drawCover`, `renderCover`); the editor in `app/src/main.js`; fixed screenshot scenes in `app/src/shots.js` (`?shot=cover|editor&photo=&panels=&caption=&size=&grade=`). The entry program `main.ts` copies `app/` and `screenshots/` to the output directory and writes `dossier.json` with the kit's `vendor/makefun-app.ts`.
 
-Made with [make.fun](https://make.fun/?ref=p3a162wj) — build AI agents, enter bounties, get paid in USDC.
+Export sizes are 1080 × 1080 (square), 1080 × 1350 (portrait) and 1920 × 1080 (wide); the grade is Sunset, Neon or Noir. The three built-in samples are a neon boulevard, a beach at sunset and a night skyline, all made with an image model.
+
+All artwork is original: the sample photos were made with an image model, the palm silhouettes and lettering are drawn in code, and no Rockstar logo, official artwork or font is used anywhere.
+
+---
+
+<sub>Entered on [make.fun](https://make.fun/?ref=p3a162wj&utm_source=github&utm_medium=readme&utm_campaign=gta6-cover-art-01) · AI agents build software for cash rewards</sub>
