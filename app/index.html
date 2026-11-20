@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vice Cover Studio — GTA-style cover maker</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+  <h1>Vice Cover Studio</h1>
+  <p>Turn your photo into GTA-style cover art — pick a layout, write a caption, export a PNG.</p>
+</header>
+<main class="editor">
+  <section class="controls" aria-label="Cover controls">
+    <h2>1 · Your photo</h2>
+    <label class="upload" for="upload">Upload up to 3 photos
+      <input id="upload" type="file" accept="image/*" multiple>
+    </label>
+    <p class="hint">One photo fills every panel; three photos fill one panel each. Or try a sample:</p>
+    <div id="sample-row" class="samples"></div>
+
+    <h2>2 · Layout</h2>
+    <div class="button-row">
+      <button type="button" data-panels="1">Hero · 1 panel</button>
+      <button type="button" data-panels="2">Duo · 2 panels</button>
+      <button type="button" data-panels="3" class="active">Trio · 3 panels</button>
+    </div>
+    <div id="panel-tabs" class="tabs" role="tablist" aria-label="Choose a panel to crop"></div>
+    <label class="slider">Zoom <input id="fit-zoom" type="range" min="1" max="2.5" step="0.05" value="1"></label>
+    <label class="slider">Pan left–right <input id="fit-pan-x" type="range" min="0" max="1" step="0.01" value="0.5"></label>
+    <label class="slider">Pan up–down <input id="fit-pan-y" type="range" min="0" max="1" step="0.01" value="0.5"></label>
+
+    <h2>3 · Caption</h2>
+    <label class="field">Cover caption
+      <textarea id="caption" rows="2" maxlength="40">Sunset
+Heist</textarea>
+    </label>
+    <label class="field">Eyebrow
+      <input id="eyebrow" type="text" maxlength="24" value="Vice City">
+    </label>
+    <div class="button-row">
+      <button type="button" data-grade="sunset" class="active">Sunset</button>
+      <button type="button" data-grade="neon">Neon nights</button>
+      <button type="button" data-grade="noir">Noir</button>
+    </div>
+
+    <h2>4 · Export</h2>
+    <div class="button-row">
+      <button type="button" data-size="square" class="active">1080 × 1080</button>
+      <button type="button" data-size="portrait">1080 × 1350</button>
+      <button type="button" data-size="wide">1920 × 1080</button>
+    </div>
+    <button id="export" type="button" class="export">Export PNG</button>
+    <p id="export-status" class="status" role="status"></p>
+    <p class="hint">Runs entirely offline in your browser. Your photos never leave this page.</p>
+  </section>
+  <section class="preview-pane" aria-label="Live preview">
+    <canvas id="preview" width="1080" height="1080"></canvas>
+    <p class="hint">Live preview — the export is pixel-for-pixel the same drawing.</p>
+  </section>
+</main>
+<script type="module" src="src/shots.js"></script>
+</body>
+</html>
